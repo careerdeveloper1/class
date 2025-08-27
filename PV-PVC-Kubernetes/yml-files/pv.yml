@@ -1,0 +1,18 @@
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata: 
+    name: pv-dodo
+    namespace: default
+    labels:
+      coder: dodo
+  spec:
+    storageClassName: dodo
+    accessModes: 
+    - ReadWriteMany
+    azureFile: 
+      secretName: dodo-secret
+      shareName: dodo-file-share
+    capacity:
+      storage: 5Gi
+      
+#kubectl create secret generic dodo-secret --from-literal=azurestorageaccountname=*** --from-literal=azurestorageaccountkey=****

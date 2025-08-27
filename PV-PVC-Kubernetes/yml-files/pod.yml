@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-dodo
+  namespace: default
+spec:
+  containers:
+  - image: nginx
+    name: dodo-cont1
+    ports:
+    - containerPort: 80
+    volumeMounts: 
+    - name: vol-dodo
+      mountPath: /usr/share/nginx/html 
+  volumes: 
+  - name: vol-dodo
+    persistentVolumeClaim:
+      claimName: pvc-dodo
+  
+  
