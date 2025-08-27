@@ -1,0 +1,5 @@
+'''1. Using Only requiredDuringSchedulingIgnoredDuringExecution
+If you specify only requiredDuringSchedulingIgnoredDuringExecution, the pod will only be scheduled on nodes that strictly match the specified criteria. If no nodes match, the pod will remain in the Pending state until a suitable node becomes available.
+
+2. Using Only preferredDuringSchedulingIgnoredDuringExecution
+If you specify only preferredDuringSchedulingIgnoredDuringExecution, Kubernetes will try to schedule the pod on nodes that match the preferred criteria but will fall back to other nodes if no preferred nodes are available.'

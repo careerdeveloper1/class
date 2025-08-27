@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-fire
+  namespace: default
+  labels:
+    coder: dodo
+spec:
+  containers:
+  - image: linuxserver/firefox
+    name: dodo-cont1
+    ports:
+    - containerPort: 3000
+    
+    

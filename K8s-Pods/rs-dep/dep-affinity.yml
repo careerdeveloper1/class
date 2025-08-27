@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-dodo
+  namespace: default
+spec: 
+  replicas: 2
+  selector: 
+    matchExpressions:
+    - key: coder
+      operator: In
+      values:
+      - dodo
+  template:
+    metadata:
+      labels:
+        coder: dodo
+      name: pod-dodo
+      namespace: default
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              matchFields: 
+              - operator: In
+                coder1: devops1
+          preferredDuringSchedulingIgnoredDuringExecution:
+            preference:  
+              matchFields:
+                coder: devops 
+            weight: 1
+
+      containers:
+      - image: nginx
+        name: cont-dodo
+        ports:
+        - containerPort: 80
+        volumeMounts: 
+        - mountPath: /usr/share/nginx/html
+          name: vol-dodo
+      nodeSelector: 
+        coder: devops
+      volumes: 
+      - name: vol-dodo
+        emptyDir:
+          sizeLimit: 5Gi
+
+
+
+      

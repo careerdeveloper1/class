@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: svc-dodo
+  namespace: default
+  labels:
+    scv: dodo
+spec:
+  type: ClusterIP
+  ports: 
+  - port: 6060
+    targetPort: 80
+  selector:
+   coder: dodo
+
+  
+

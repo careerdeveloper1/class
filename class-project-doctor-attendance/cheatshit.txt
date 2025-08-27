@@ -1,0 +1,113 @@
+FE:-
+sudo mkdir -p /var/www/frontend
+ls
+pwd
+cd /var/www/frontend
+sudo chown -R frontenduser:frontenduser /var/www/frontend
+sudo chmod -R 755 /var/www/frontend
+sudo apt update
+sudo apt-get remove --purge nodejs npm -y
+sudo apt-get autoremove -y
+sudo rm /usr/bin/node
+sudo rm /usr/bin/npm
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node -v
+npm -v
+
+sudo npm install -g serve
+npx serve -s dist
+
+
+
+
+
+
+
+
+
+BE:-
+sudo mkdir -p /var/www/backend
+cd /var/www/backend
+sudo chown -R backenduser:backenduser /var/www/backend
+sudo chmod -R 755 /var/www/backend
+sudo apt update
+
+sudo apt-get remove --purge nodejs npm -y
+sudo apt-get autoremove -y
+sudo rm /usr/bin/node
+sudo rm /usr/bin/npm
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node -v
+npm -v
+npm install cors
+
+node server.js
+
+
+
+
+DB:-
+
+sudo apt update
+sudo apt install -y mysql-server
+sudo mysql_secure_installation
+
+sudo mysql -u root
+mysql -u root -p  or sudo mysql
+or 
+sudo mysql -u root
+mysql -u root -p
+
+SHOW DATABASES;
+
+CREATE DATABASE hospital_db;
+
+USE hospital_db;
+
+CREATE TABLE doctors (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  attendance VARCHAR(50)
+);
+
+SHOW VARIABLES LIKE 'validate_password%';
+SET GLOBAL validate_password.policy = LOW;
+
+
+SELECT user, host FROM mysql.user;
+CREATE USER 'root'@'172.167.8.117' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.167.8.117' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+SELECT user, host FROM mysql.user WHERE user = 'root';
+
+sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+bind-address = 0.0.0.0
+
+sudo ufw allow 3306/tcp
+
+
+sudo systemctl status mysql
+sudo systemctl start mysql
+
+{
+sudo mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+FLUSH PRIVILEGES;
+EXIT;
+mysql -u root -p
+
+
+}
+
+
+SHOW DATABASES;
+USE hospital_db;
+SHOW TABLES;
+SELECT * FROM doctors;
+
+
