@@ -1,0 +1,99 @@
+# docker exec -i -t vishal-worker2 sh -- login to worker node
+# k get nodes --show-labels
+# k label nodes vishal-worker2 name=sapan
+# k label nodes vishal-control-plane name=sharma
+# k label nodes vishal-worker name=vishal --overwrite=true
+# k describe pod vishal-pod
+# kubectl delete pod -l ac=voltas
+# kubectl get pods -o name | grep vishal-
+# kubectl delete pods,netpol --all -n default
+# k port-forward pod/vishal-pod1 --address 0.0.0.0 8085:8085
+# kubectl get pod vishalng -o yaml
+# Delete labels: kubectl label nodes vishal-worker2 name-
+# watch kubectl get pods
+# kubectl get pods --all-namespaces -o wide
+# k get pods --watch   -to see the status
+# k get pod --show-labels -o wide
+# k exec -it vishalng -- sh
+# cd /usr/share/nginx/html/
+# nginx -s reload
+# kubectl api-resources | sort
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: local-pv
+  labels: 
+    app: local
+  namespace: default
+spec:
+  capacity: 
+    storage: 100Mi
+  accessModes:
+  - ReadWriteOnce 
+  persistentVolumeReclaimPolicy: Retain
+  local: 
+    path: /mnt
+  volumeMode: Block
+  nodeAffinity: 
+    required: 
+      nodeSelectorTerms: 
+      - matchExpressions: 
+        - key: name1
+          operator: In
+          values: 
+          - vishal1
+
+
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: local-pvc
+  labels: 
+    app: local
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteOnce 
+  resources: 
+    requests:
+      storage: 80Mi
+  volumeMode: Block
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: vishalng
+  namespace: default
+  labels:
+    ac1: voltas1
+spec: 
+  nodeSelector:
+    name1: vishal1
+  containers:
+    - name: vishal-ng
+      image: nginx
+      imagePullPolicy: IfNotPresent
+      ports: 
+        - containerPort: 80
+      volumeMounts: 
+      - mountPath: /usr/share/nginx/html
+        name: vishal-vol
+  
+  volumes:
+  - name: vishal-vol
+    persistentVolumeClaim:
+      claimName: local-pvc
+
+
+
+
+
+  
+
