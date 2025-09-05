@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalng1
+  labels:
+    ac1: voltas1
+spec:
+  containers:
+  - name: nginx-cont
+    image: nginx:alpine
+    ports:
+      - containerPort: 80
+  nodeName: vishal-worker
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalng1
+  labels:
+    ac1: voltas1
+spec:
+  containers:
+  - name: nginx-cont
+    image: nginx:alpine
+    ports:
+      - containerPort: 80
+  # nodeName: vishal-worker
+  nodeSelector: 
+    name2: vishal2
+
+########################
+
+# whether if I have node with labels name2:vishal2 or not doeesnt matter, it will first search for labels if find the label then create on that pasrticular labelled node else will create on any suitable node
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalng1
+  labels:
+    ac1: voltas1
+spec:
+  affinity: 
+    nodeAffinity: 
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - preference:
+          matchExpressions: 
+          - key: name2
+            operator: In
+            values: 
+            - vishal2
+        weight: 1
+
+  containers:
+  - name: nginx-cont
+    image: nginx:alpine
+    ports:
+      - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalng1
+  labels:
+    ac1: voltas1
+spec:
+  affinity: 
+    nodeAffinity: 
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - preference:
+          matchExpressions: 
+          - key: name3
+            operator: In
+            values: 
+            - vishal3
+        weight: 1
+
+  containers:
+  - name: nginx-cont
+    image: nginx:alpine
+    ports:
+      - containerPort: 80
+
+
+
+
+
+
+########################
+# in requiredDuringSchedulingIgnoredDuringExecution if key and values are met then only pod will be created else pod will be in pending state
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalng1
+  labels:
+    ac1: voltas1
+spec:
+  affinity: 
+    nodeAffinity: 
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions: 
+          - key: name2
+            operator: In
+            values: 
+            - vishal2
+
+  containers: 
+  - name: nginx-cont
+    image: nginx:alpine
+    ports:
+      - containerPort: 80
+      
+######################################
