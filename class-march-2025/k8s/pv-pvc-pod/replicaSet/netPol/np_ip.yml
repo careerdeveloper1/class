@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-chrome1-to-nginx1
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      ac1: nginx1
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 10.244.67.34/32
+    ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-chrome2-to-nginx2
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      ac2: nginx2
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 10.244.153.177/32
+    ports:
+    - protocol: TCP
+      port: 80
