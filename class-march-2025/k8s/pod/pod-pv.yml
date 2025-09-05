@@ -1,0 +1,27 @@
+# (https://github.com/kubernetes-sigs/azurefile-csi-driver/tree/master -- Install driver on a Kubernetes cluster-- install by kubectl -- https://github.com/kubernetes-sigs/azurefile-csi-driver/blob/master/docs/install-azurefile-csi-driver.md -- install CSI driver master version(only for testing purpose) -- https://github.com/kubernetes-sigs/azurefile-csi-driver/blob/master/docs/install-csi-driver-master.md) 
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: vishalng
+  namespace: default
+  labels:
+    ac1: voltas1
+spec: 
+  nodeSelector:
+    name1: vishal1
+  containers:
+    - name: vishal-ng
+      image: nginx
+      imagePullPolicy: IfNotPresent
+      ports: 
+        - containerPort: 80
+      volumeMounts: 
+      - mountPath: /usr/share/nginx/html
+        name: vishal-vol
+  
+  volumes:
+  - name: vishal-vol
+    persistentVolumeClaim:
+      claimName: azurefile-pvc
+
