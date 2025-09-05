@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: 
+  name: vishalnetpol1
+  namespace: default
+  labels: 
+    ac1: netpol1
+spec: 
+  policyTypes: 
+  - Ingress
+  podSelector: 
+    matchLabels: 
+      ac1: nginx1
+  ingress: 
+  - from: 
+    - ipBlock: 
+        cidr: 10.244.153.154/32
+    ports: 
+    - port: 80
+      protocol: TCP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: 
+  name: vishalnetpol2
+  namespace: default
+  labels: 
+    ac2: netpol2
+spec: 
+  policyTypes: 
+  - Ingress
+  podSelector: 
+    matchLabels: 
+      ac2: nginx2
+  ingress: 
+  - from: 
+    - ipBlock: 
+        cidr: 10.244.67.1/32
+    ports: 
+    - port: 80
+      protocol: TCP
