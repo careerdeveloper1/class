@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vishal-dep
+  namespace: default
+  labels:
+    app1: dep1
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      ac3: voltas3
+  template:
+    metadata:
+      name: vishalng1
+      namespace: default
+      labels: 
+        ac3: voltas3
+    spec:
+      containers: 
+      - name: vishal-cont
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+  strategy: 
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+    type: RollingUpdate
