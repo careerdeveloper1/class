@@ -1,0 +1,87 @@
+# docker exec -i -t vishal-worker2 sh -- login to worker node
+# k get nodes --show-labels
+# k label nodes vishal-worker2 name=sapan
+# k label nodes vishal-control-plane name=sharma
+# k label nodes vishal-worker name=vishal --overwrite=true
+# k describe pod vishal-pod
+# kubectl delete pod -l ac=voltas
+# kubectl get pods -o name | grep vishal-
+# kubectl delete pods --all -n default
+# k port-forward pod/vishal-pod1 --address 0.0.0.0 8085:8085
+# kubectl get pod vishalng -o yaml
+# Delete labels: kubectl label nodes vishal-worker2 name-
+# watch kubectl get pods
+# kubectl get pods --all-namespaces -o wide
+# k get pods --watch   -to see the status
+# k get pod --show-labels -o wide
+# k exec -it vishalng -- sh
+# cd /usr/share/nginx/html/
+# nginx -s reload
+# https://github.com/kubernetes/examples/tree/master/_archived/volumes/azure_file
+
+
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: local-pv
+  labels: 
+    app: local
+  namespace: default
+spec:
+  capacity: 
+    storage: 100Mi
+  accessModes:
+  - ReadWriteOnce 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  hostPath: 
+    path: /mnt/data
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: local-pvc
+  labels: 
+    app: local
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteOnce 
+  resources: 
+    requests:
+      storage: 80Mi
+  storageClassName: local-storage
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: vishalng
+  namespace: default
+  labels:
+    ac1: voltas1
+spec: 
+  nodeSelector:
+    name1: vishal1
+  containers:
+    - name: vishal-ng
+      image: nginx:alpine
+      imagePullPolicy: IfNotPresent
+      ports: 
+        - containerPort: 80
+      volumeMounts: 
+      - mountPath: /usr/share/nginx/html
+        name: vishal-vol
+  
+  volumes:
+  - name: vishal-vol
+    persistentVolumeClaim:
+      claimName: local-pvc
+    
+
+   
