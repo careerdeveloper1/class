@@ -1,0 +1,65 @@
+# docker exec -i -t vishal-worker2 sh -- login to worker node
+# k get nodes --show-labels
+# k label nodes vishal-worker2 name=sapan
+# k label nodes vishal-control-plane name=sharma
+# k label nodes vishal-worker name=vishal --overwrite=true
+# k describe pod vishal-pod
+# kubectl delete pod -l ac=voltas
+# kubectl get pods -o name | grep vishal-
+# kubectl delete pods --all -n default
+# k port-forward pod/vishal-pod1 --address 0.0.0.0 8085:8085
+# kubectl get pod vishalng -o yaml
+# Delete labels: kubectl label nodes vishal-worker2 name-
+# watch kubectl get pods
+# kubectl get pods --all-namespaces -o wide
+# k get pods --watch   -to see the status
+# k get pod --show-labels -o wide
+# k exec -it vishalng -- sh
+# cd /usr/share/nginx/html/
+# nginx -s reload
+# k delete pods,pvc,pv,rs,deployment,ingress --all -n default
+# kubernetes pv azurefile secret
+# https://learn.microsoft.com/en-us/azure/aks/azure-csi-files-storage-provision
+
+# kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=myAKSStorageAccount --from-literal=azurestorageaccountkey=$STORAGE_KEY
+
+# (azrue-secret:- kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=vishal1  --from-literal=azurestorageaccountkey=YDeGqHkoEtwXZievcFw0K+eQLVtRsFhGVSACG8nCmO+esoHD/G2GwXtUsBSd7ch0K0bLjhPdVDJp+AStEXzf5Q==)
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: azure-pv
+  labels: 
+    app: azure
+  namespace: default
+spec:
+  capacity: 
+    storage: 100Mi
+  accessModes:
+  - ReadWriteOnce 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azurefile-storage
+  csi: 
+    driver: file.csi.azure.com
+    volumeHandle: vishal-volhand
+    volumeAttributes: 
+      shareName: vishalfs
+    nodeStageSecretRef: 
+      name: azure-secret
+      namespace: default
+
+  nodeAffinity: 
+    required: 
+      nodeSelectorTerms: 
+      - matchExpressions: 
+        - key: name1
+          operator: In
+          values: 
+          - vishal1
+
+
+
+
+  
+
