@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: vishal-rs
+  namespace: default
+  labels:
+    app1: rs1
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      ac2: voltas2
+
+  template: 
+    metadata: 
+      name: vishalng
+      namespace: default
+      labels:
+        ac2: voltas2
+    spec: 
+      containers: 
+      - name: nginx-cont
+        image: careerdeveloper1/vishalmm:v4
+        ports: 
+        - containerPort: 80
+        imagePullPolicy: Always
+          
+
+
