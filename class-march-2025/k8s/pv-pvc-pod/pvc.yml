@@ -1,0 +1,23 @@
+
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: azurefile-pvc
+  labels: 
+    app: azurefile
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteOnce 
+  resources: 
+    requests:
+      storage: 80Mi
+  storageClassName: azurefile-storage
+
+
+
+
+  
+
