@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: vish
+
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishal1
+  namespace: vish
+spec:
+  nodeName: vishal-worker2
+  containers:
+    - name: vishal-cont
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishal1
+  namespace: default
+spec:
+  nodeName: vishal-worker2
+  containers:
+    - name: vishal-cont
+      image: linuxserver/firefox
+      ports:
+        - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: sapan-pod
+  namespace: default
+spec: 
+  containers:
+    - name: sapan-nginx
+      image: nginx:alpine
+      imagePullPolicy: IfNotPresent
+      ports: 
+        - containerPort: 80
+    - name: sapan-chrome
+      image: lscr.io/linuxserver/chrome
+      imagePullPolicy: IfNotPresent
+      ports: 
+        - containerPort: 3000
+    
+
+
+---
+
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: vishal
+  namespace: default
+spec: 
+  containers:
+    - name: sapan-nginx
+      image: nginx:alpine
+      imagePullPolicy: IfNotPresent
+      ports: 
+        - containerPort: 80
+    - name: sapan-firefox
+      image: lscr.io/linuxserver/firefox
+      imagePullPolicy: IfNotPresent
+      ports: 
+        - containerPort: 3000
+    
