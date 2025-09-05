@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: vishalnetpol
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      ac1: chrome1
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          ac1: nginx1
+    ports:
+    - protocol: TCP
+      port: 80
+  policyTypes:
+  - Egress
