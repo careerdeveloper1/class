@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hrms-frontend
+  labels:
+    app: hrms-frontend
+spec:
+  containers:
+    - name: frontend
+      image: careerdeveloper1/hrms-frontend:v2
+      ports:
+        - containerPort: 80
+      env:
+        - name: VITE_API_URL
+          value: http://hrms-backend:5000/api

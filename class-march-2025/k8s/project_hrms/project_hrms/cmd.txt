@@ -1,0 +1,191 @@
+hrms-app/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── EmployeeList.jsx
+│   │   │   ├── Login.jsx
+│   │   │   └── Navbar.jsx
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── package.json
+│   ├── vite.config.js
+│   └── Dockerfile
+├── backend/
+│   ├── config/
+│   │   └── db.config.js
+│   ├── controllers/
+│   │   └── employeeController.js
+│   ├── models/
+│   │   ├── index.js
+│   │   └── employee.model.js
+│   ├── routes/
+│   │   └── employee.routes.js
+│   ├── package.json
+│   ├── server.js
+│   └── Dockerfile
+├── database/
+│   ├── init.sql
+│   └── Dockerfile
+└── kubernetes/
+    ├── frontend-deployment.yaml
+    ├── backend-deployment.yaml
+    ├── mysql-deployment.yaml
+    ├── frontend-service.yaml
+    ├── backend-service.yaml
+    └── mysql-service.yaml
+
+
+# Create the main project directory
+mkdir -p hrms-app
+
+# ---------------- FRONTEND ----------------
+mkdir -p hrms-app/frontend/public
+mkdir -p hrms-app/frontend/src/components
+
+# Create frontend files
+touch hrms-app/frontend/src/components/EmployeeList.jsx
+touch hrms-app/frontend/src/components/Login.jsx
+touch hrms-app/frontend/src/components/Navbar.jsx
+touch hrms-app/frontend/src/App.jsx
+touch hrms-app/frontend/src/main.jsx
+touch hrms-app/frontend/src/index.css
+touch hrms-app/frontend/package.json
+touch hrms-app/frontend/vite.config.js
+touch hrms-app/frontend/Dockerfile
+
+# ---------------- BACKEND ----------------
+mkdir -p hrms-app/backend/config
+mkdir -p hrms-app/backend/controllers
+mkdir -p hrms-app/backend/models
+mkdir -p hrms-app/backend/routes
+
+# Create backend files
+touch hrms-app/backend/config/db.config.js
+touch hrms-app/backend/controllers/employeeController.js
+touch hrms-app/backend/models/index.js
+touch hrms-app/backend/models/employee.model.js
+touch hrms-app/backend/routes/employee.routes.js
+touch hrms-app/backend/package.json
+touch hrms-app/backend/server.js
+touch hrms-app/backend/Dockerfile
+
+# ---------------- DATABASE ----------------
+mkdir -p hrms-app/database
+
+# Create database files
+touch hrms-app/database/init.sql
+touch hrms-app/database/Dockerfile
+
+# ---------------- KUBERNETES ----------------
+mkdir -p hrms-app/kubernetes
+
+# Create Kubernetes manifest files
+touch hrms-app/kubernetes/frontend-deployment.yaml
+touch hrms-app/kubernetes/backend-deployment.yaml
+touch hrms-app/kubernetes/mysql-deployment.yaml
+touch hrms-app/kubernetes/frontend-service.yaml
+touch hrms-app/kubernetes/backend-service.yaml
+touch hrms-app/kubernetes/mysql-service.yaml
+
+
+
+
+################### Docker ############
+
+
+docker rm -f frontend-container backend-container mysql-container
+docker rmi -f careerdeveloper1/hrms-frontend:v2 careerdeveloper1/hrms-backend:v2 careerdeveloper1/hrms-mysql:v2
+
+# Build database image
+cd database
+docker build -t hrms-mysql .
+
+# Build backend image
+cd ../backend
+docker build -t hrms-backend .
+
+# Build frontend image
+cd ../frontend
+docker build -t hrms-frontend .
+
+
+
+# Build database image
+docker build -t careerdeveloper1/hrms-mysql:v2 .
+docker push careerdeveloper1/hrms-mysql:v2
+
+# Build backend image
+docker build -t careerdeveloper1/hrms-backend:v2 .
+docker push careerdeveloper1/hrms-backend:v2
+
+# Build frontend image
+docker build -t careerdeveloper1/hrms-frontend:v2 .
+docker push careerdeveloper1/hrms-frontend:v2
+
+
+
+# Create a network for containers to communicate
+docker network create hrms-network
+
+# Create network
+docker network create hrms-network
+
+# Run MySQL container
+docker run -d --name mysql-container --network hrms-network \
+  -e MYSQL_ROOT_PASSWORD=rootpassword \
+  -e MYSQL_DATABASE=hrms_db \
+  -e MYSQL_USER=hrms_user \
+  -e MYSQL_PASSWORD=hrms_password \
+  -p 3306:3306 \
+  careerdeveloper1/hrms-mysql:v2
+
+# Run Backend container with network alias
+docker run -d --name backend-container --network hrms-network \
+  --network-alias backend-svc \
+  -e DB_HOST=mysql-container \
+  -e DB_USER=hrms_user \
+  -e DB_PASSWORD=hrms_password \
+  -e DB_NAME=hrms_db \
+  -e DB_PORT=3306 \
+  -p 8080:8080 \
+  careerdeveloper1/hrms-backend:v2
+# Wait for backend to start
+sleep 15
+
+# Run Frontend container
+docker run -d --name frontend-container --network hrms-network \
+  -p 3000:80 \
+  careerdeveloper1/hrms-frontend:v2
+
+
+or   
+
+# Run frontend container
+
+
+  docker run -d -p 3000:80 --name frontend-container \
+  --add-host=backend:host-gateway careerdeveloper1/hrms-frontend:v2
+
+
+############3
+
+docker exec -it mysql-container sh
+mysql -u hrms_user -p
+hrms_password
+
+SHOW DATABASES;
+USE hrms_db;
+SHOW TABLES;
+SELECT * FROM employees;
+
+INSERT INTO employees 
+(employee_id, name, joining_date, age, qualifications, address, manager, hr_manager, created_at) 
+VALUES
+('VT004', 'Sneha Verma', '2021-11-05', 30, 'MBA Finance', 'Pune, Maharashtra', 'Rajiv Malhotra', 'Priya Singh', NOW()),
+('VT005', 'Arjun Reddy', '2023-07-18', 27, 'B.Sc IT', 'Hyderabad, Telangana', 'Anjali Mehta', 'Priya Singh', NOW()),
+('VT006', 'Neha Gupta', '2022-05-12', 29, 'Chartered Accountant', 'Kolkata, West Bengal', 'Rajiv Malhotra', 'Priya Singh', NOW()),
+('VT007', 'Karan Singh', '2024-02-01', 34, 'MBA Marketing', 'Chandigarh, Punjab', 'Anjali Mehta', 'Priya Singh', NOW()),
+('VT008', 'Ritu Sharma', '2023-09-23', 26, 'B.Tech Electronics', 'Jaipur, Rajasthan', 'Rajiv Malhotra', 'Priya Singh', NOW());
+
