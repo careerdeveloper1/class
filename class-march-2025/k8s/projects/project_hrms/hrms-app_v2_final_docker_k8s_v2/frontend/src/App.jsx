@@ -6,7 +6,7 @@ export default function App() {
   return (
     <div className="container">
       <header>
-        <h1>Vishal Technologies - HRMS</h1>
+        <h1>Vishal Technologies - HRMS V2</h1>
       </header>
 
       <main>

@@ -1,0 +1,96 @@
+docker rm -f hrms-mysql hrms-backend hrms-frontend
+docker rmi -f careerdeveloper1/hrms-mysql:v2 careerdeveloper1/hrms-backend:v2 careerdeveloper1/hrms-frontend:v2
+
+
+
+docker rm -f hrms-frontend
+docker rmi -f careerdeveloper1/hrms-frontend:v2
+
+
+
+# Database
+docker build -t careerdeveloper1/hrms-mysql:v2 .
+# Backend
+docker build -t careerdeveloper1/hrms-backend:v2 .
+# Frontend
+docker build -t careerdeveloper1/hrms-frontend:v2 .
+
+
+# 1. MySQL container
+docker run -d --name hrms-mysql \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=hrms_db \
+  -e MYSQL_USER=hrms_user \
+  -e MYSQL_PASSWORD=hrms_password \
+  -p 3306:3306 \
+  careerdeveloper1/hrms-mysql:v2
+
+# 2. Backend container (link to MySQL)
+docker run -d --name hrms-backend \
+  --link hrms-mysql:db \
+  -e DB_HOST=hrms-mysql \
+  -e DB_USER=hrms_user \
+  -e DB_PASSWORD=hrms_password \
+  -e DB_NAME=hrms_db \
+  -e DB_PORT=3306 \
+  -p 5000:5000 \
+  careerdeveloper1/hrms-backend:v2
+
+sleep 15
+
+# 3. Frontend container (link to backend)
+docker run -d --name hrms-frontend \
+  --link hrms-backend:backend \
+  -e VITE_API_URL=http://hrms-backend:5000/api \
+  -p 8081:80 \
+  careerdeveloper1/hrms-frontend:v2
+
+
+
+
+
+docker login -u careerdeveloper1
+XXXXXXXXX
+docker push careerdeveloper1/hrms-frontend:v2
+docker push careerdeveloper1/hrms-backend:v2
+docker push careerdeveloper1/hrms-mysql:v2
+
+
+
+
+#######################
+
+docker exec -it hrms-mysql sh
+mysql -u hrms_user -p
+hrms_password
+
+SHOW DATABASES;
+USE hrms_db;
+SHOW TABLES;
+SELECT * FROM employees;
+
+DESCRIBE employees;
+
+INSERT INTO employees (employee_id, name, joining_date, age, qualification, address, manager, hr_manager)
+VALUES
+(1, 'John Doe', '2020-01-15', 28, 'BSc Computer Science', '123 Main St, Cityville', 'Jane Smith', 'Robert Brown'),
+(2, 'Alice Johnson', '2019-11-23', 32, 'MBA', '456 Oak Rd, Townsville', 'John Doe', 'Sarah Williams'),
+(3, 'Bob Lee', '2021-06-10', 25, 'BEng Electrical Engineering', '789 Pine Ave, Suburbia', 'Alice Johnson', 'Mark Davis'),
+(4, 'Emma White', '2020-09-05', 29, 'BBA', '101 Maple St, Villageville', 'Bob Lee', 'Linda Clark'),
+(5, 'Michael Green', '2018-03-22', 35, 'MSc Data Science', '202 Birch Blvd, Citytown', 'Emma White', 'Chris Harris');
+
+
+
+
+################
+
+kubectl port-forward svc/hrms-frontend 8082:80
+
+
+INSERT INTO employees (employee_id, name, joining_date, age, qualification, address, manager, hr_manager)
+VALUES
+(6, 'John Doe', '2020-06-15', 30, 'Bachelor of Science', '123 Main St, Cityville', 'Jane Smith', 'Mary Johnson'),
+(2, 'Alice Brown', '2019-11-22', 25, 'Master of Arts', '456 Oak Rd, Townsville', 'Tom White', 'Nancy Lee'),
+(3, 'Bob Clark', '2021-03-10', 35, 'PhD in Engineering', '789 Pine Ln, Villagetown', 'Richard Green', 'Susan Taylor'),
+(4, 'Emily Davis', '2020-09-30', 28, 'MBA', '321 Maple St, Suburbia', 'James Wilson', 'Helen Clark'),
+(5, 'Michael Wilson', '2018-07-25', 40, 'Bachelor of Engineering', '654 Birch Ave, Countryside', 'Laura Lee', 'David Moore');
