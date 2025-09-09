@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishal1
+  labels:
+    pm: modiji
+spec:
+  containers:
+  - name: vmm-cont
+    image: careerdeveloper1/vishalmm:v4
+    ports:
+      - containerPort: 80
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata: 
+  name: ci-svc
+  namespace: default
+  labels:
+    service1: vishal1
+spec: 
+  selector: 
+    pm: modiji
+  ports: 
+  - port: 8082  # service port
+    targetPort: 80 # caontinaer port
+    protocol: TCP
+    name: ci-svc-port-name
+  type: ClusterIP
