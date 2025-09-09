@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalng1
+  namespace: default
+  labels: 
+    ac1: nginx1
+spec:
+  containers: 
+  - image: nginx:alpine
+    imagePullPolicy: IfNotPresent
+    name: nginx-cont
+    ports: 
+    - containerPort: 80
+      protocol: TCP
+      name: nginxport
+  # nodeName: vishal-worker
+  os: 
+    name: linux
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalng2
+  namespace: default
+  labels: 
+    ac2: nginx2
+spec:
+  containers: 
+  - image: nginx:alpine
+    imagePullPolicy: IfNotPresent
+    name: nginx-cont
+    ports: 
+    - containerPort: 80
+      protocol: TCP
+      name: nginxport
+  # nodeName: vishal-worker
+  os: 
+    name: linux
+
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalch1
+  namespace: default
+  labels: 
+    ac1: chrome1
+spec:
+  containers: 
+  - image: lscr.io/linuxserver/chrome:latest
+    imagePullPolicy: IfNotPresent
+    name: chrome-cont
+    ports: 
+    - containerPort: 3000
+      protocol: TCP
+      name: chromeport
+  # nodeName: vishal-worker
+  os: 
+    name: linux
+
+
+
+---
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vishalch2
+  namespace: default
+  labels: 
+    ac2: chrome2
+spec:
+  containers: 
+  - image: lscr.io/linuxserver/chrome:latest
+    imagePullPolicy: IfNotPresent
+    name: chrome-cont
+    ports: 
+    - containerPort: 3000
+      protocol: TCP
+      name: chromeport
+  # nodeName: vishal-worker
+  os: 
+    name: linux
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-chrome1-to-nginx1
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      ac1: nginx1
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          ac1: chrome1
+    ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-chrome2-to-nginx2
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      ac2: nginx2
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          ac2: chrome2
+    ports:
+    - protocol: TCP
+      port: 80
