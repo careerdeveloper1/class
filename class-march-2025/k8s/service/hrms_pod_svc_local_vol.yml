@@ -1,6 +1,6 @@
-##########################
-#  hrms mysql #####
-##########################
+# # # # ##########################
+# # # # #  hrms mysql #####
+# # # # ##########################
 apiVersion: v1
 kind: PersistentVolume
 metadata: 
@@ -25,7 +25,7 @@ spec:
             values: 
             - vishal2
   persistentVolumeReclaimPolicy: Retain
-  # storageClassName: hrms-mysql-local
+#   # storageClassName: hrms-mysql-local
 ---
 
 
@@ -47,43 +47,55 @@ spec:
     matchLabels: 
       app: hrms-pv
 
-  # storageClassName: hrms-mysql-local
+#   # storageClassName: hrms-mysql-local
 
 ---
 
-
-
-
-apiVersion: v1
-kind: Pod
-metadata: 
-  name: hrms-local-pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrms-local-dep-mysql
   namespace: default
   labels: 
-    app: hrms-pod
+    app: hrms-dep-mysql
 spec:
-  containers:
-  - name: mysql-cont
-    image: careerdeveloper1/hrms-mysql:v2
-    ports:
-      - containerPort: 3306
-    env: 
-    - name: MYSQL_ROOT_PASSWORD
-      value: root
-    - name: MYSQL_DATABASE
-      value: hrms_db
-    - name: MYSQL_USER
-      value: hrms_user
-    - name: MYSQL_PASSWORD
-      value: hrms_password
-
-    volumeMounts: 
-    - mountPath: /var/lib/mysql
-      name: vishal-vol
-  volumes: 
-  - name: vishal-vol
-    persistentVolumeClaim: 
-      claimName: hrms-local-pvc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hrms-mysql
+  template:
+    metadata:
+      labels:
+        app: hrms-mysql
+    spec:
+      containers:
+      - name: mysql-cont
+        image: careerdeveloper1/hrms-mysql:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        env: 
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_DATABASE
+          value: hrms_db
+        - name: MYSQL_USER
+          value: hrms_user
+        - name: MYSQL_PASSWORD
+          value: hrms_password
+        
+        volumeMounts: 
+        - mountPath: /var/lib/mysql
+          name: vishal-vol
+      volumes: 
+      - name: vishal-vol
+        persistentVolumeClaim: 
+          claimName: hrms-local-pvc
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 ---
 
@@ -93,72 +105,55 @@ metadata:
   name: hrms-mysql
 spec:
   selector:
-    app: hrms-pod
+    app: hrms-mysql
   ports:
   - port: 3306
     targetPort: 3306
-##########################
-# hrms FE #####
-##########################
+
+
+# ################################ BE #############
 
 ---
 
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: hrms-frontend
-  labels:
-    app: hrms-frontend
+  name: hrms-local-dep-be
+  namespace: default
+  labels: 
+    app: hrms-dep-be
 spec:
-  containers:
-  - name: backend
-    image: careerdeveloper1/hrms-frontend:v2
-    ports:
-      - containerPort: 80
-
---- 
-apiVersion: v1
-kind: Service
-metadata:
-  name: hrms-frontend
-spec:
+  replicas: 1
   selector:
-    app: hrms-frontend
-  ports:
-  - port: 80
-    targetPort: 80
-  type: NodePort
-
-##########################
-# hrms BE #####
-##########################
-
-
----
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: hrms-backend
-  labels:
-    app: hrms-backend
-spec:
-  containers:
-  - name: backend
-    image: careerdeveloper1/hrms-backend:v2
-    ports:
-      - containerPort: 5000
-    env: 
-    - name: DB_HOST
-      value: hrms-mysql
-    - name: DB_USER
-      value: hrms_user
-    - name: DB_PASSWORD
-      value: hrms_password
-    - name: DB_NAME
-      value: hrms_db
-    - name: DB_PORT
-      value: "3306"
+    matchLabels:
+      app: hrms-be
+  template:
+    metadata:
+      labels:
+        app: hrms-be
+    spec:
+      containers:
+      - name: be-cont
+        image: careerdeveloper1/hrms-backend:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env: 
+        - name: DB_HOST
+          value: hrms-mysql
+        - name: DB_USER
+          value: hrms_user
+        - name: DB_PASSWORD
+          value: hrms_password
+        - name: DB_NAME
+          value: hrms_db
+        - name: DB_PORT
+          value: "3306"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 ---
 
@@ -168,7 +163,7 @@ metadata:
   name: hrms-backend
 spec:
   selector:
-    app: hrms-backend
+    app: hrms-be
   ports:
   - port: 5000
     targetPort: 5000
@@ -176,4 +171,50 @@ spec:
   type: ClusterIP
 
 
+# ################################ FE #############
+---
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrms-local-dep-fe
+  namespace: default
+  labels: 
+    app: hrms-dep-fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hrms-fe
+  template:
+    metadata:
+      labels:
+        app: hrms-fe
+    spec:
+      containers:
+      - name: fe-cont
+        image: careerdeveloper1/hrms-frontend:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrms-frontend
+spec:
+  selector:
+    app: hrms-fe  # should be same as the label of pod
+  ports:
+  - port: 8081
+    targetPort: 80
+    nodePort: 30180
+  type: NodePort
