@@ -9,6 +9,7 @@ spec:
   containers:
   - name: backend
     image: careerdeveloper1/hrms-backend:v2
+    imagePullPolicy: Always
     ports:
       - containerPort: 5000
     env: 
@@ -53,6 +54,7 @@ spec:
   containers:
   - name: backend
     image: careerdeveloper1/hrms-frontend:v2
+    imagePullPolicy: Always
     ports:
       - containerPort: 80
 
@@ -85,6 +87,7 @@ spec:
   containers:
   - name: db
     image: careerdeveloper1/hrms-mysql:v2
+    imagePullPolicy: Always
     ports:
       - containerPort: 3306
 
