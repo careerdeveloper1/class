@@ -1,7 +1,7 @@
 # Az install, login to az portal using service pricipal, then create asp & webapp 
 # set the cnv and secrets in setting/ Environments / Configure Production- Environment secrets & Environment variables
 
-name: cr_rg_swishrr_ubuntu-latest_runner
+name: 1_vishalRunner_cr_rg_vishal
 
 on:
   workflow_dispatch:  # allows manual trigger from Actions tab
@@ -12,8 +12,8 @@ env:
   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS_VISHAL }}
 
 jobs: 
-  cr_rg_swishrr_ubuntu-latest_runner: 
-    runs-on: ubuntu-latest
+  vishalRunner_cr_rg_vishal: 
+    runs-on: vishal
 
     steps: 
       # Check if az cli exists
