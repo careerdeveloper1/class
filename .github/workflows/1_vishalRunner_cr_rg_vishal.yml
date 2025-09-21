@@ -1,0 +1,70 @@
+# Az install, login to az portal using service pricipal, then create asp & webapp 
+# set the cnv and secrets in setting/ Environments / Configure Production- Environment secrets & Environment variables
+
+name: cr_rg_swishrr_ubuntu-latest_runner
+
+on:
+  workflow_dispatch:  # allows manual trigger from Actions tab
+
+env:
+  RESOURCE_GROUP: webapp_rg
+  AZURE_REGION: ukwest
+  AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS_VISHAL }}
+
+jobs: 
+  cr_rg_swishrr_ubuntu-latest_runner: 
+    runs-on: ubuntu-latest
+
+    steps: 
+      # Check if az cli exists
+      - name: Check if az cli exists
+        id: check-az
+        run: |
+          if command -v az >/dev/null 2>&1; then
+            echo "az cli already installed: $(az version | head -n 1)"
+            echo "installed=true" >> $GITHUB_ENV
+          else
+            echo "az cli not found"
+            echo "installed=false" >> $GITHUB_ENV
+          fi
+
+      # Install azure-cli
+      - name: Install azure-cli
+        if: env.installed == 'false'
+        uses: pietrobolcato/install-azure-cli-action@v1.0.1
+
+      # Azure Login
+      - name: Azure Login
+        uses: azure/login@v2
+        with: 
+          creds: ${{ env.AZURE_CREDENTIALS }}
+
+      # Az account show
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+
+      # Create Resource Group
+      - name: Create Resource Group
+        run: |
+          echo "Creating Resource Group: ${{ env.RESOURCE_GROUP }}"
+          az group create \
+            --name ${{ env.RESOURCE_GROUP }} \
+            --location ${{ env.AZURE_REGION }}
+
+      # Pause for 10 seconds
+      - name: Pause for 10 seconds
+        run: |
+          echo "Waiting 10 seconds before next command..."
+          sleep 10
+
+      # Create App Service Plan
+      - name: show RG
+        run: |
+          echo "showing accounts details"
+          az account show
+          echo "showing RG's names"
+          az group list --output table
