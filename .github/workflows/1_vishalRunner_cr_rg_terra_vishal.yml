@@ -55,3 +55,17 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
+          
+      # checkout code
+      - name: checkout code
+        uses: actions/checkout@v5
+        with: 
+          repository: careerdeveloper1/class.git
+          ref: 'main'
+          fetch-depth: 0
+          sparse-checkout: terra/*
+        
+
+
+
+
