@@ -65,7 +65,13 @@ jobs:
           fetch-depth: 0
           sparse-checkout: terra/*
         
-
+      # check the content
+      - name: List contents of the runner after checkout
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -lart
+          echo "--- terra folder contents ---"
+          ls -lart terra
 
 
 
