@@ -77,4 +77,21 @@ jobs:
           ls -lart terra
 
 
+   ## Terraform steps
+      - name: List contents of the runner after checkout
+        working-directory: terra/ENV   # change to your desired environment folder
+        run: |
+          echo "Initializing Terraform..."
+          terraform init
+          
+          echo "Validating Terraform configuration..."
+          terraform validate
+          
+          echo "Planning Terraform changes..."
+          terraform plan
+          
+          echo "Applying Terraform changes..."
+          terraform apply -auto-approve
+      
+
 
