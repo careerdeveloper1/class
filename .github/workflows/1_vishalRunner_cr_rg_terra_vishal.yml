@@ -10,7 +10,7 @@ env:
 
 jobs: 
   vishalRunner_cr_rg_terra_vishal: 
-    runs-on: ubuntu-latest
+    runs-on: vishal
 
     steps: 
       # Check if az cli is installed, install only if missing
