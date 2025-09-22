@@ -1,7 +1,8 @@
 varenvrg = {
   rg1 = {
-    rg-name  = "rg"
+    rg-name  = "rg1"
     location = "westus"
 
   }
 }
+
