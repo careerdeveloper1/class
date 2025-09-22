@@ -11,7 +11,7 @@ env:
 
 jobs: 
   vishalRunner_cr_rg_terra_vishal: 
-    runs-on: vishal
+    runs-on: ubuntu-latest
     env:
       PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
