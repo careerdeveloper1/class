@@ -1,10 +1,12 @@
 name: 1_vishalRunner_cr_rg_terra_vishal
 
-on:
-  push:
-    paths:
-      - 'terra/**'
+# on:
+#   push:
+#     paths:
+#       - 'terra/**'
 
+on:
+  workflow_dispatch:  # allows manual trigger from Actions tab
 env:
   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS_VISHAL }}
   TF_WORKING_DIR: terra/ENV   # Terraform environment folder
