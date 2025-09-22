@@ -1,7 +1,7 @@
 varenvrg = {
-    rg1={
-        rg-name = "vishal-rg"
-        location = "westus"
+  rg1 = {
+    rg-name  = "rg"
+    location = "westus"
 
-    }
+  }
 }
