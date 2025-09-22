@@ -7,10 +7,13 @@ env:
   RESOURCE_GROUP: webapp_rg
   AZURE_REGION: ukwest
   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS_VISHAL }}
+  
 
 jobs: 
   vishalRunner_cr_rg_terra_vishal: 
     runs-on: vishal
+    env:
+      PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
     steps: 
       # Check if az cli is installed, install only if missing
@@ -60,7 +63,7 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v5
         with: 
-          repository: careerdeveloper1/class.git
+          repository: careerdeveloper1/class
           ref: 'main'
           fetch-depth: 0
           sparse-checkout: terra/*
