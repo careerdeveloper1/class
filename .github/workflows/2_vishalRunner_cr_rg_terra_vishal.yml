@@ -4,21 +4,15 @@ on:
   workflow_dispatch:  # allows manual trigger from Actions tab
 
 env:
-  RESOURCE_GROUP: webapp_rg
-  AZURE_REGION: ukwest
   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS_VISHAL }}
   TF_WORKING_DIR: terra/ENV   # Terraform environment folder
+  
 
 jobs: 
   vishalRunner_cr_rg_terra_vishal: 
     runs-on: vishal
     env:
       PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
-    # Set default working directory for all run steps
-    defaults:
-      run:
-        working-directory: ${{ env.TF_WORKING_DIR }}
 
     steps: 
       # Check if az cli is installed, install only if missing
@@ -32,13 +26,13 @@ jobs:
             curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           fi
 
-      # Az login   
+        # Az login   
       - name: Az login
         uses: azure/login@v2
         with: 
-          creds: ${{ env.AZURE_CREDENTIALS }}
+            creds: ${{ env.AZURE_CREDENTIALS }}
 
-      # Azure CLI script
+        # Azure CLI script
       - name: Azure CLI script
         uses: azure/cli@v2
         with:
@@ -46,7 +40,7 @@ jobs:
           inlineScript: |
             az account show
 
-      # Ensure terraform is installed
+        # Ensure terraform is installed
       - name: Ensure terraform is installed
         id: check_terraform
         run: |
@@ -57,50 +51,46 @@ jobs:
           else
             echo "installed=false" >> $GITHUB_OUTPUT
           fi
-
       # Install Terraform only if not already installed
       - name: Set up Terraform
         if: steps.check_terraform.outputs.installed == 'false'
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
-
-      # Checkout code (sparse checkout of terra)
-      - name: Checkout code
+          
+      # checkout code
+      - name: checkout code
         uses: actions/checkout@v5
         with: 
           repository: careerdeveloper1/class
           ref: 'main'
           fetch-depth: 0
           sparse-checkout: terra
-
-      # Verify contents
+        
+      # check the content
       - name: List contents of the runner after checkout
         run: |
           echo "Current directory: $(pwd)"
           ls -lart
           echo "--- terra folder contents ---"
-          ls -lart .
+          ls -lart terra
 
-      # Terraform steps using defaults working-directory
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
 
-      - name: Terraform Init
-        id: init
-        run: terraform init -input=false
+   ## Terraform steps
+      - name: List contents of the runner after checkout
+        working-directory: ${{ env.TF_WORKING_DIR }}   # change to your desired environment folder
+        run: |
+          echo "Initializing Terraform..."
+          terraform init
+          
+          echo "Validating Terraform configuration..."
+          terraform validate
+          
+          echo "Planning Terraform changes..."
+          terraform plan
+          
+          echo "Applying Terraform changes..."
+          terraform apply -auto-approve
+      
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color -input=false
-        continue-on-error: true
-
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply -auto-approve
