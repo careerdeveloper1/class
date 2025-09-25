@@ -1,4 +1,4 @@
-variable "varenvstwebapp" {}
+# variable "varenvstwebapp" {}
 variable "varenvrg" {}
 variable "prefix1" {
   default = "vishal-"
