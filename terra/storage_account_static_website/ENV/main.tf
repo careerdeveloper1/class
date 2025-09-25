@@ -14,7 +14,7 @@ module "rg_module" {
 
 variable "varenvsa" {}
 module "sa_module" {
-  # source = "../../rg_etc/RG/"
+  # source = "../../rg_etc/SA/"
   depends_on = [ module.rg_module ]
   source = "git::https://github.com/careerdeveloper1/class.git//terra/rg_etc/SA"
   varsa  = var.varenvsa
