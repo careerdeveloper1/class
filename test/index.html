@@ -3,125 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic-Tac-Toe - Play Now</title>
+    <title>Your Name | Software Developer</title>
     <style>
+        /* Basic Styling */
         body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: white;
+            font-family: -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
             padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
         }
-        h1 {
-            font-size: 36px;
+        
+        /* Header Section */
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
         }
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
+        header h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 2.5em;
         }
-        .cell {
-            width: 100px;
-            height: 100px;
-            background: white;
-            color: black;
-            font-size: 36px;
-            font-weight: bold;
+        header p {
+            margin: 5px 0 0;
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+        .contact-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .contact-info a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Sections */
+        section {
+            padding: 20px 0;
+        }
+        section h2 {
+            color: #2980b9;
+            border-bottom: 2px solid #3498db;
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        
+        /* Skills Section */
+        .skills-list {
+            list-style: none;
+            padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .cell:hover {
-            background: #ddd;
+        .skills-list li {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
         }
-        .winner {
-            font-size: 24px;
-            margin-top: 20px;
+        .skills-list li:hover {
+            background-color: #bdc3c7;
         }
-        .restart {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 18px;
-            border: none;
-            background: yellow;
-            color: black;
+        
+        /* Project Section */
+        .project {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .project h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .project p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .project a {
+            color: #3498db;
+            text-decoration: none;
             font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
+        }
+        .project a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1>🎮 Tic-Tac-Toe Game on Akshay/Sapan/Vishal/Ananya/Kriti</h1>
-    <p>Click on a cell to play! X goes first.</p>
-    <div class="board">
-        <div class="cell" onclick="makeMove(0)"></div>
-        <div class="cell" onclick="makeMove(1)"></div>
-        <div class="cell" onclick="makeMove(2)"></div>
-        <div class="cell" onclick="makeMove(3)"></div>
-        <div class="cell" onclick="makeMove(4)"></div>
-        <div class="cell" onclick="makeMove(5)"></div>
-        <div class="cell" onclick="makeMove(6)"></div>
-        <div class="cell" onclick="makeMove(7)"></div>
-        <div class="cell" onclick="makeMove(8)"></div>
+    <div class="container">
+        <header>
+            <h1>Your Name</h1>
+            <p>Software Developer | Web Enthusiast</p>
+            <div class="contact-info">
+                <a href="mailto:youremail@example.com">youremail@example.com</a> |
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a> |
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a> |
+                <a href="tel:+1234567890">+1234567890</a>
+            </div>
+        </header>
+
+        <section id="about">
+            <h2>About Me</h2>
+            <p>
+                I'm a passionate software developer with expertise in **[Your Main Skill, e.g., JavaScript, Python]**. I have a strong foundation in building scalable and efficient applications, with a keen interest in front-end development, API design, and cloud technologies. I'm always eager to learn new technologies and solve challenging problems.
+            </p>
+        </section>
+
+        <section id="skills">
+            <h2>Skills</h2>
+            <ul class="skills-list">
+                <li>JavaScript</li>
+                <li>Python</li>
+                <li>React</li>
+                <li>Node.js</li>
+                <li>HTML & CSS</li>
+                <li>SQL</li>
+                <li>Git</li>
+                <li>AWS</li>
+                <li>Docker</li>
+                <li>RESTful APIs</li>
+            </ul>
+        </section>
+
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="project">
+                <h3>Project Title 1</h3>
+                <p>A brief description of your project. Mention the technologies used and what the project does.</p>
+                <p>
+                    <strong>Technologies:</strong> React, Node.js, MongoDB
+                </p>
+                <a href="https://github.com/yourusername/project1" target="_blank">View on GitHub</a>
+            </div>
+            
+            <div class="project">
+                <h3>Project Title 2</h3>
+                <p>Another project description. Highlight the problem you solved or the features you implemented.</p>
+                <p>
+                    <strong>Technologies:</strong> Python, Django, PostgreSQL
+                </p>
+                <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Let's Connect</h2>
+            <p>I'm open to new opportunities and collaborations. Feel free to reach out to me via email or connect on LinkedIn.</p>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 Your Name. All Rights Reserved.</p>
+        </footer>
     </div>
-
-    <p class="winner"></p>
-    <button class="restart" onclick="restartGame()">🔄 Restart Game</button>
-
-    <script>
-        let board = ["", "", "", "", "", "", "", "", ""];
-        let currentPlayer = "X";
-        let gameActive = true;
-
-        function makeMove(index) {
-            if (board[index] === "" && gameActive) {
-                board[index] = currentPlayer;
-                document.getElementsByClassName("cell")[index].innerText = currentPlayer;
-                checkWinner();
-                currentPlayer = currentPlayer === "X" ? "O" : "X";
-            }
-        }
-
-        function checkWinner() {
-            const winPatterns = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-                [0, 4, 8], [2, 4, 6] // Diagonals
-            ];
-
-            for (let pattern of winPatterns) {
-                let [a, b, c] = pattern;
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    document.querySelector(".winner").innerText = `🎉 Player ${board[a]} Wins!`;
-                    gameActive = false;
-                    return;
-                }
-            }
-
-            if (!board.includes("")) {
-                document.querySelector(".winner").innerText = "🤝 It's a Draw!";
-                gameActive = false;
-            }
-        }
-
-        function restartGame() {
-            board = ["", "", "", "", "", "", "", "", ""];
-            gameActive = true;
-            currentPlayer = "X";
-            document.querySelector(".winner").innerText = "";
-            let cells = document.getElementsByClassName("cell");
-            for (let cell of cells) {
-                cell.innerText = "";
-            }
-        }
-    </script>
 
 </body>
 </html>
