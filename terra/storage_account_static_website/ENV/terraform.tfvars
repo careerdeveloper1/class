@@ -12,3 +12,17 @@ varenvsa ={
     location = "westus"
   }
 }
+
+varenvcont ={
+  cont1={
+    cont-name= "container1"
+    container_access_type   = "public"
+    sa= "sa1"
+  }
+  cont2={
+    cont-name= "container2"
+    container_access_type   = "public"
+    sa= "sa1"
+  }
+}
+

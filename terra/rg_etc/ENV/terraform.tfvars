@@ -7,8 +7,21 @@ varenvrg = {
 
 varenvsa ={
   sa1={
-    sa-name= "vishalsa782"
+    sa-name= "vishalsa783"
     rg-name  = "rg1"
     location = "westus"
+  }
+}
+
+varenvcont ={
+  cont1={
+    cont-name= "container1"
+    container_access_type   = "public"
+    sa= "sa1"
+  }
+  cont2={
+    cont-name= "container2"
+    container_access_type   = "public"
+    sa= "sa1"
   }
 }
