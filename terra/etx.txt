@@ -1,0 +1,12 @@
+terraform import 'module.rg_module.azurerm_resource_group.rg_block["rg1"]' /subscriptions/0d1f337b-95f9-4b75-a683-8bc0ac9e4214/resourceGroups/vishal-rg1
+
+
+terraform init
+terraform validate
+terraform fmt
+terraform plan
+terraform apply -auto-approve
+
+
+az group delete -n vishal-rg1 --yes --no-wait
+az group delete --name vishal-rg1 --yes --no-wait
