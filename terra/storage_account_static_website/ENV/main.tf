@@ -11,3 +11,12 @@ module "rg_module" {
   prefix = var.prefix1
 
 }
+
+
+module "sa_module" {
+  # source = "../../rg_etc/RG/"
+  depends_on = [ module.rg_module ]
+  source = "git::https://github.com/careerdeveloper1/class.git//terra/rg_etc/SA"
+  varsa  = var.varenvsa
+  prefix = var.prefix1
+}
