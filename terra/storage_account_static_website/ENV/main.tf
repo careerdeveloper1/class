@@ -1,9 +1,9 @@
 # variable "varenvstwebapp" {}
-variable "varenvrg" {}
 variable "prefix1" {
   default = "vishal-"
 }
 
+variable "varenvrg" {}
 module "rg_module" {
   # source = "../../rg_etc/RG/"
   source = "git::https://github.com/careerdeveloper1/class.git//terra/rg_etc/RG"
@@ -12,7 +12,7 @@ module "rg_module" {
 
 }
 
-
+variable "varenvsa" {}
 module "sa_module" {
   # source = "../../rg_etc/RG/"
   depends_on = [ module.rg_module ]
