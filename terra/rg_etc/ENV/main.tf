@@ -18,7 +18,7 @@ module "sa_module" {
 
 variable "varenvcont" {}
 module "cont_module" {
-  depends_on = [ module.sa_module ]
+  depends_on = [ module.sa_module, module.rg_module ]
   source = "../../rg_etc/CONT/"
   # source = "git::https://github.com/careerdeveloper1/class.git//terra/rg_etc/CONT"
   varcont  = var.varenvcont

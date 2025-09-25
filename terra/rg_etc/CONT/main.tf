@@ -5,7 +5,7 @@ variable "prefix" {}
 data "azurerm_storage_account" "sa-data-block" {
     for_each = var.varsa-data
     name= each.value.sa-name
-    resource_group_name = each.value.rg-name  
+    resource_group_name = "${var.prefix}${each.value.rg-name}"    
 }
 
 resource "azurerm_storage_container" "cont-block" {

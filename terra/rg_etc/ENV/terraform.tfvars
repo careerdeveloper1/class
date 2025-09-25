@@ -7,7 +7,7 @@ varenvrg = {
 
 varenvsa ={
   sa1={
-    sa-name= "vishalsa783"
+    sa-name= "vishalsa784"
     rg-name  = "rg1"
     location = "westus"
   }
