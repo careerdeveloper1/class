@@ -25,3 +25,13 @@ module "cont_module" {
   prefix = var.prefix1
   varsa-data= var.varenvsa
 }
+
+variable "varenvsw" {}
+module "sw_module" {
+  depends_on = [ module.sa_module, module.rg_module, module.cont_module ]
+  source = "../../rg_etc/SW/"
+  # source = "git::https://github.com/careerdeveloper1/class.git//terra/rg_etc/SW"
+  varsw= var.varenvsw
+  prefix = var.prefix1
+  varsa-data= var.varenvsa
+}
